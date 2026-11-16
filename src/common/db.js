@@ -1,8 +1,4 @@
-const mockValues = {
-  usuarios: [],
-  bairros: [],
-  localizacoes: [],
-};
+import { mockValues } from './mockData.js';
 
 class Database {
   #idSequences;
@@ -31,30 +27,38 @@ class Database {
       const nextId = this.#idSequences[entity] ?? 1;
       this.#idSequences[entity] = nextId + 1;
 
-      const savedValue = { id: nextId, ...newValue };
-      this.values[entity].push(savedValue);
-      return;
+      newValue.id = nextId;
+      this.values[entity].push(newValue);
+      return newValue;
     }
 
     const foundValueIndex = this.values[entity].findIndex(
       (value) => value.id === newValue.id,
     );
     if (foundValueIndex === -1) {
-      if (newValue.id < this.#idSequences[entity])
+      const currentSeq = this.#idSequences[entity] ?? 1;
+      if (newValue.id >= currentSeq) {
         this.#idSequences[entity] = newValue.id + 1;
+      }
 
       this.values[entity].push(newValue);
       this.values[entity].sort((a, b) => a.id - b.id);
-      return;
+      return newValue;
     }
 
     this.values[entity][foundValueIndex] = newValue;
+    return newValue;
   }
 
   _defineIdSequences(initValues) {
     this.#idSequences = {};
-    for (const key in Object.keys(initValues)) {
-      this.#idSequences[key] = (initValues[key]?.at(-1)?.id ?? 0) + 1;
+    for (const key of Object.keys(initValues)) {
+      const maxId =
+        initValues[key]?.reduce(
+          (max, item) => (item.id > max ? item.id : max),
+          0,
+        ) ?? 0;
+      this.#idSequences[key] = maxId + 1;
     }
   }
 }
