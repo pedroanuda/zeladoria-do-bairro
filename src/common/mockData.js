@@ -603,9 +603,22 @@ const atualizacoes = [
     dataCriacao: new Date('2026-11-14T09:30:00-03:00'),
   }),
 
-  // Tipo NOTICIA em Pinheiros
+  // Tipo NOTICIA sobre acessibilidade de calçadas na Vila Mariana
   new Atualizacao({
     id: 3,
+    titulo: 'Campanha: calçada livre é calçada acessível para todos',
+    conteudo:
+      'Mutirão de orientação técnica gratuita aos moradores sobre nivelamento e rampas de acessibilidade nas vias da Vila Mariana.',
+    tipo: TipoAtualizacao.NOTICIA,
+    anexos: [],
+    autorId: 2,
+    bairroId: 1,
+    dataCriacao: new Date('2026-11-08T10:00:00-03:00'),
+  }),
+
+  // Tipo NOTICIA em Pinheiros
+  new Atualizacao({
+    id: 4,
     titulo:
       'Novo cronograma de limpeza preventiva de galerias pluviais em Pinheiros',
     conteudo:
