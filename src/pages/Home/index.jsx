@@ -172,6 +172,7 @@ export default function Home() {
             text="Criar ocorrência"
             icon={<i className="fa-solid fa-plus" />}
             variant="primary"
+            href="/ocorrencias/nova"
           />
           <ActionButton
             text="Eventos"

@@ -42,6 +42,13 @@ const StyledSurface = styled(Surface)`
     gap: 1rem;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--cor-borda);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgb(from var(--cor-fundo) r g b / 65%);
+    }
 
     &:last-child {
       border-bottom: none;
@@ -202,7 +209,11 @@ export default function MinhasOcorrenciasSection({ ocorrencias = [] }) {
           visiveis.map((ocorrencia) => {
             const statusInfo = getStatusInfo(ocorrencia.status);
             return (
-              <div key={ocorrencia.id} className="ocorrencia-item">
+              <Link
+                key={ocorrencia.id}
+                to={`/ocorrencias/${ocorrencia.id}`}
+                className="ocorrencia-item"
+              >
                 <div className="categoria-icon">
                   {getCategoryIcon(ocorrencia.categoria)}
                 </div>
@@ -228,7 +239,7 @@ export default function MinhasOcorrenciasSection({ ocorrencias = [] }) {
                     ))}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })
         )}

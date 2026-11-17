@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Button from './Button';
 import fullLogo from '@/assets/logo-full.png';
@@ -12,6 +12,7 @@ const StyledHeader = styled.header`
   border-bottom: 1px solid var(--cor-borda);
   position: sticky;
   top: 0;
+  z-index: 10;
 
   .navigation-div,
   .user-actions-div {
@@ -83,10 +84,14 @@ function NavOption({ to, children }) {
 }
 
 export default function Header() {
+  const navigate = useNavigate();
+
   return (
     <StyledHeader>
       <div className="navigation-div">
-        <img src={fullLogo} alt="Logo" />
+        <Link to="/home" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={fullLogo} alt="Logo" style={{ height: '2.25rem' }} />
+        </Link>
         <nav>
           <NavOption to={'/home'}>Início</NavOption>
           <NavOption to={'/minhas-ocorrencias'}>Minhas Ocorrências</NavOption>
@@ -94,7 +99,7 @@ export default function Header() {
         </nav>
       </div>
       <div className="user-actions-div">
-        <Button variant="primary">
+        <Button variant="primary" onClick={() => navigate('/ocorrencias/nova')}>
           <i className="fa-solid fa-plus" />
           Registrar ocorrência
         </Button>
