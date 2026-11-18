@@ -96,6 +96,8 @@ export default function Header() {
           <NavOption to={'/home'}>Início</NavOption>
           <NavOption to={'/minhas-ocorrencias'}>Minhas Ocorrências</NavOption>
           <NavOption to={'/mural'}>Mural</NavOption>
+          <NavOption to={'/eventos'}>Eventos</NavOption>
+          <NavOption to={'/noticias'}>Notícias</NavOption>
         </nav>
       </div>
       <div className="user-actions-div">

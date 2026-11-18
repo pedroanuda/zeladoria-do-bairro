@@ -568,21 +568,29 @@ const iniciativas = [
 ];
 
 const atualizacoes = [
-  // Tipo NOTICIA com anexos
+  // Tipo NOTICIA com múltiplos parágrafos e anexos
   new Atualizacao({
     id: 1,
     titulo:
       'Subprefeitura conclui revitalização da iluminação em 4 vias do bairro',
     conteudo:
-      'Foram substituídas 68 luminárias antigas por modelos de LED de maior eficiência energética, ampliando a visibilidade noturna nas ruas internas da Vila Mariana.',
+      'Foram substituídas 68 luminárias antigas de vapor de sódio por modelos modernos de LED de alta eficiência energética, ampliando significativamente a visibilidade noturna nas ruas internas da Vila Mariana.\n\nA intervenção atendeu prioritariamente os trechos apontados pelos moradores através dos registros de ocorrências na plataforma, contemplando a Rua França Pinto, Rua Morgado de Mateus, Rua Joaquim Távora e o entorno da Praça Nossa Senhora Aparecida.\n\nAlém de proporcionar maior sensação de segurança para pedestres e ciclistas no período noturno, o novo parque luminotécnico reduz o consumo de energia em cerca de 45% e possui vida útil estimada superior a 50 mil horas de operação.\n\nConfira nos arquivos em anexo o relatório técnico completo com o mapeamento dos postes modernizados e o comparativo fotográfico de antes e depois.',
     tipo: TipoAtualizacao.NOTICIA,
     anexos: [
       new Anexo({
         id: 6,
-        nome: 'relatorio-iluminacao-led.pdf',
+        nome: 'relatorio-iluminacao-led-vila-mariana.pdf',
         tipo: 'application/pdf',
         tamanho: 845120,
-        caminho: '/uploads/atualizacoes/relatorio-iluminacao-led.pdf',
+        caminho:
+          '/uploads/atualizacoes/relatorio-iluminacao-led-vila-mariana.pdf',
+      }),
+      new Anexo({
+        id: 7,
+        nome: 'comparativo-luminosidade-vias.jpg',
+        tipo: 'image/jpeg',
+        tamanho: 542720,
+        caminho: '/uploads/atualizacoes/comparativo-luminosidade-vias.jpg',
       }),
     ],
     autorId: 3,
@@ -590,14 +598,22 @@ const atualizacoes = [
     dataCriacao: new Date('2026-11-11T16:00:00-03:00'),
   }),
 
-  // Tipo COMUNICADO sem anexos
+  // Tipo COMUNICADO com instruções detalhadas e mapa de ruas em anexo
   new Atualizacao({
     id: 2,
     titulo: 'Alteração temporária no horário do Cata-Bagulho neste sábado',
     conteudo:
-      'Informamos aos moradores da Vila Mariana que a operação Cata-Bagulho deste sábado ocorrerá excepcionalmente das 07h às 11h. Coloquem os materiais descartáveis na calçada até as 06h45.',
+      'Informamos aos moradores da Vila Mariana que a operação Cata-Bagulho deste sábado ocorrerá excepcionalmente das 07h às 11h devido às obras preventivas na rede de drenagem da região.\n\nPedimos que móveis antigos, colchões, eletrodomésticos quebrados, restos de madeira e pneus sejam colocados na calçada até as 06h45 da manhã, evitando obstruir a faixa livre de circulação dos pedestres.\n\nLembramos que entulho de construção civil, tintas, solventes, lâmpadas fluorescentes e resíduos domiciliares comuns não são recolhidos pelo caminhão do Cata-Bagulho e devem ser entregues diretamente no Ecoponto Vila Mariana.',
     tipo: TipoAtualizacao.COMUNICADO,
-    anexos: [],
+    anexos: [
+      new Anexo({
+        id: 8,
+        nome: 'roteiro-ruas-cata-bagulho-novembro.pdf',
+        tipo: 'application/pdf',
+        tamanho: 319488,
+        caminho: '/uploads/atualizacoes/roteiro-ruas-cata-bagulho-novembro.pdf',
+      }),
+    ],
     autorId: 3,
     bairroId: 1,
     dataCriacao: new Date('2026-11-14T09:30:00-03:00'),
@@ -608,9 +624,17 @@ const atualizacoes = [
     id: 3,
     titulo: 'Campanha: calçada livre é calçada acessível para todos',
     conteudo:
-      'Mutirão de orientação técnica gratuita aos moradores sobre nivelamento e rampas de acessibilidade nas vias da Vila Mariana.',
+      'A Subprefeitura, em conjunto com o Conselho Comunitário de Zeladoria da Vila Mariana, iniciou o mutirão de orientação técnica gratuita aos moradores e comerciantes sobre nivelamento, piso tátil e rampas de acessibilidade nas calçadas do bairro.\n\nO objetivo da campanha é eliminar degraus irregulares, buracos e obstáculos que dificultam o deslocamento diário de pessoas idosas, cadeirantes, pessoas com mobilidade reduzida e famílias com carrinhos de bebê.\n\nBaixe abaixo a cartilha ilustrada com as medidas oficiais da faixa livre de passeio e saiba como solicitar vistoria orientativa sem custos.',
     tipo: TipoAtualizacao.NOTICIA,
-    anexos: [],
+    anexos: [
+      new Anexo({
+        id: 9,
+        nome: 'cartilha-calcada-acessivel-padrao.pdf',
+        tipo: 'application/pdf',
+        tamanho: 1245184,
+        caminho: '/uploads/atualizacoes/cartilha-calcada-acessivel-padrao.pdf',
+      }),
+    ],
     autorId: 2,
     bairroId: 1,
     dataCriacao: new Date('2026-11-08T10:00:00-03:00'),
@@ -622,9 +646,18 @@ const atualizacoes = [
     titulo:
       'Novo cronograma de limpeza preventiva de galerias pluviais em Pinheiros',
     conteudo:
-      'As equipes de zeladoria atuarão ao longo da semana nas principais vias de Pinheiros para prevenção de alagamentos no período chuvoso.',
+      'As equipes de zeladoria atuarão ao longo da semana nas principais vias de Pinheiros para prevenção de alagamentos no período chuvoso, realizando desobstrução mecânica e hidrojateamento das bocas de lobo.\n\nOs trabalhos acontecem entre 08h e 16h, com sinalização local para minimizar impactos no trânsito. Caso identifique pontos críticos de acúmulo de água em sua rua, registre uma ocorrência na categoria Drenagem e Esgoto.',
     tipo: TipoAtualizacao.NOTICIA,
-    anexos: [],
+    anexos: [
+      new Anexo({
+        id: 10,
+        nome: 'cronograma-hidrojateamento-pinheiros.pdf',
+        tipo: 'application/pdf',
+        tamanho: 492000,
+        caminho:
+          '/uploads/atualizacoes/cronograma-hidrojateamento-pinheiros.pdf',
+      }),
+    ],
     autorId: 6,
     bairroId: 2,
     dataCriacao: new Date('2026-11-12T11:20:00-03:00'),

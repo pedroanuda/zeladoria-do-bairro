@@ -177,10 +177,12 @@ export default function Home() {
           <ActionButton
             text="Eventos"
             icon={<i className="fa-regular fa-calendar" />}
+            href="/eventos"
           />
           <ActionButton
             text="Notícias"
             icon={<i className="fa-regular fa-newspaper" />}
+            href="/noticias"
           />
         </div>
 

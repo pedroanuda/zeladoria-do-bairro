@@ -41,6 +41,19 @@ const StyledCard = styled(Surface)`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--cor-primaria);
+  }
+
+  > .card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+  }
 
   .card-banner {
     position: relative;
@@ -226,18 +239,20 @@ export default function MuralIniciativasSection({ iniciativas = [] }) {
 
             return (
               <StyledCard key={iniciativa.id}>
-                <div
-                  className={`card-banner ${isGreen ? 'variant-green' : 'variant-blue'}`}
-                >
-                  {isGreen ? <ParkIllustration /> : <CommunityIllustration />}
-                  <span className={`card-tag ${tag.className}`}>
-                    {tag.label}
-                  </span>
-                </div>
-                <div className="card-content">
-                  <h4>{iniciativa.nome}</h4>
-                  <p>{iniciativa.descricao}</p>
-                </div>
+                <Link to="/mural" className="card-link">
+                  <div
+                    className={`card-banner ${isGreen ? 'variant-green' : 'variant-blue'}`}
+                  >
+                    {isGreen ? <ParkIllustration /> : <CommunityIllustration />}
+                    <span className={`card-tag ${tag.className}`}>
+                      {tag.label}
+                    </span>
+                  </div>
+                  <div className="card-content">
+                    <h4>{iniciativa.nome}</h4>
+                    <p>{iniciativa.descricao}</p>
+                  </div>
+                </Link>
               </StyledCard>
             );
           })}

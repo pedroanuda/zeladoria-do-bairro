@@ -33,12 +33,19 @@ const StyledSurface = styled(Surface)`
   }
 
   .noticia-item {
+    display: block;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--cor-borda);
+    text-decoration: none;
+    color: inherit;
 
     &:last-child {
       border-bottom: none;
       padding-bottom: 0;
+    }
+
+    &:hover .noticia-titulo {
+      color: var(--cor-primaria);
     }
 
     .noticia-titulo {
@@ -46,9 +53,13 @@ const StyledSurface = styled(Surface)`
       color: var(--cor-grafite);
       font-size: 0.925rem;
       line-height: 1.35;
+      transition: color 0.15s ease;
     }
 
-    .noticia-data {
+    .noticia-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
       font-size: 0.8rem;
       color: rgb(from var(--cor-grafite) r g b / 62%);
       margin-top: 0.2rem;
@@ -75,12 +86,23 @@ export default function NoticiasBairroSection({ noticias = [] }) {
         <p className="empty-state">Nenhuma notícia recente neste bairro.</p>
       ) : (
         visiveis.map((noticia) => (
-          <div key={noticia.id} className="noticia-item">
+          <Link
+            key={noticia.id}
+            to={`/noticias/${noticia.id}`}
+            className="noticia-item"
+          >
             <p className="noticia-titulo">{noticia.titulo}</p>
-            <p className="noticia-data">
-              {formatRelativeDays(noticia.dataCriacao)}
-            </p>
-          </div>
+            <div className="noticia-meta">
+              <span>{formatRelativeDays(noticia.dataCriacao)}</span>
+              {noticia.anexos?.length > 0 && (
+                <span>
+                  <i className="fa-solid fa-paperclip" />{' '}
+                  {noticia.anexos.length}{' '}
+                  {noticia.anexos.length === 1 ? 'anexo' : 'anexos'}
+                </span>
+              )}
+            </div>
+          </Link>
         ))
       )}
     </StyledSurface>

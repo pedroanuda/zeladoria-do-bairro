@@ -13,6 +13,21 @@ const SHORT_MONTHS = [
   'DEZ',
 ];
 
+const FULL_MONTHS = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+];
+
 const SHORT_DAYS_CAPITALIZED = [
   'Dom',
   'Seg',
@@ -66,4 +81,25 @@ export function formatShortEventDate(dateInput) {
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   return `${dayOfWeek} ${day}/${month}`;
+}
+
+export function formatFullDateTime(dateInput) {
+  if (!dateInput) return '';
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const day = date.getDate();
+  const month = FULL_MONTHS[date.getMonth()] ?? '';
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day} de ${month} de ${year} às ${hours}h${minutes}`;
+}
+
+export function formatFileSize(bytes) {
+  if (!bytes || Number.isNaN(Number(bytes))) return '0 KB';
+  const num = Number(bytes);
+  if (num < 1024) return `${num} B`;
+  const kb = num / 1024;
+  if (kb < 1024) return `${Math.round(kb)} KB`;
+  const mb = kb / 1024;
+  return `${mb.toFixed(1).replace('.', ',')} MB`;
 }
