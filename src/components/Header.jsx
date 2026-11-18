@@ -176,6 +176,9 @@ export default function Header() {
           <NavOption to={'/noticias'} onClick={() => setMenuOpen(false)}>
             Notícias
           </NavOption>
+          <NavOption to={'/'} onClick={() => setMenuOpen(false)}>
+            Sobre o Projeto
+          </NavOption>
         </nav>
       </div>
       <div className="user-actions-div">

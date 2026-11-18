@@ -402,6 +402,10 @@ export default function ZeladorLayout({ children }) {
             <i className="fa-solid fa-repeat" />
             <span>Alternar para visão Morador</span>
           </Link>
+          <Link to="/" className="switch-persona-link">
+            <i className="fa-solid fa-house" />
+            <span>Apresentação do projeto</span>
+          </Link>
         </div>
       </StyledSidebar>
 
