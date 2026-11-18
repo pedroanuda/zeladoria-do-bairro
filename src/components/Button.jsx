@@ -47,13 +47,14 @@ export default function Button({
   variant,
   ariaLabel,
   style,
+  type = 'button',
   children,
 }) {
   return (
     <StyledButton
       onClick={onClick}
       className={variant}
-      type="button"
+      type={type}
       aria-label={ariaLabel}
       style={style}
     >

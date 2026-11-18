@@ -149,12 +149,38 @@ const FormCard = styled(Surface)`
         outline: none;
         border-color: var(--cor-primaria);
       }
+
+      &.input-error {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
     }
 
     textarea {
       min-height: 6rem;
       resize: vertical;
     }
+
+    .error-text {
+      color: #d32f2f;
+      font-size: 0.76rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  }
+
+  .success-banner {
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
+    background-color: rgb(from var(--cor-primaria) r g b / 14%);
+    color: var(--cor-primaria);
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 `;
 
@@ -166,6 +192,8 @@ export default function ZeladorComunicacao() {
   const [titulo, setTitulo] = useState('');
   const [conteudo, setConteudo] = useState('');
   const [anexoNome, setAnexoNome] = useState('');
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState('');
   const [version, setVersion] = useState(0);
 
   const publicacoes = atualizacaoService
@@ -175,9 +203,25 @@ export default function ZeladorComunicacao() {
   void version;
 
   const handlePublish = (e) => {
-    e.preventDefault();
-    if (!titulo.trim() || !conteudo.trim()) return;
+    if (e) e.preventDefault();
 
+    const newErrors = {};
+    if (!titulo.trim()) {
+      newErrors.titulo = 'Informe o título da notícia ou comunicado.';
+    }
+    if (!conteudo.trim()) {
+      newErrors.conteudo = 'Informe o conteúdo completo da publicação.';
+    } else if (conteudo.trim().length < 10) {
+      newErrors.conteudo = 'O conteúdo deve ter pelo menos 10 caracteres.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setSuccessMsg('');
+      return;
+    }
+
+    setErrors({});
     const anexos = anexoNome.trim()
       ? [
           {
@@ -205,6 +249,7 @@ export default function ZeladorComunicacao() {
     setTitulo('');
     setConteudo('');
     setAnexoNome('');
+    setSuccessMsg('Publicação divulgada para o bairro com sucesso!');
     setVersion((v) => v + 1);
   };
 
@@ -264,7 +309,7 @@ export default function ZeladorComunicacao() {
 
           <FormCard>
             <h3>Publicar notícia ou comunicado</h3>
-            <form onSubmit={handlePublish}>
+            <form onSubmit={handlePublish} noValidate>
               <div className="field-group">
                 <label htmlFor="pub-tipo">Tipo de publicação</label>
                 <select
@@ -282,28 +327,52 @@ export default function ZeladorComunicacao() {
               </div>
 
               <div className="field-group">
-                <label htmlFor="pub-titulo">Título</label>
+                <label htmlFor="pub-titulo">Título *</label>
                 <input
                   id="pub-titulo"
                   type="text"
+                  className={errors.titulo ? 'input-error' : ''}
                   value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
+                  onChange={(e) => {
+                    setTitulo(e.target.value);
+                    if (errors.titulo) {
+                      setErrors((prev) => ({ ...prev, titulo: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Ex: Nova programação de poda preventiva"
-                  required
                 />
+                {errors.titulo && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.titulo}
+                  </span>
+                )}
               </div>
 
               <div className="field-group">
                 <label htmlFor="pub-conteudo">
-                  Conteúdo completo (separe parágrafos com linha em branco)
+                  Conteúdo completo (separe parágrafos com linha em branco) *
                 </label>
                 <textarea
                   id="pub-conteudo"
+                  className={errors.conteudo ? 'input-error' : ''}
                   value={conteudo}
-                  onChange={(e) => setConteudo(e.target.value)}
+                  onChange={(e) => {
+                    setConteudo(e.target.value);
+                    if (errors.conteudo) {
+                      setErrors((prev) => ({ ...prev, conteudo: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Escreva os detalhes da notícia ou orientação aos moradores..."
-                  required
                 />
+                {errors.conteudo && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.conteudo}
+                  </span>
+                )}
               </div>
 
               <div className="field-group">
@@ -319,9 +388,16 @@ export default function ZeladorComunicacao() {
                 />
               </div>
 
+              {successMsg && (
+                <div className="success-banner">
+                  <i className="fa-solid fa-circle-check" />
+                  <span>{successMsg}</span>
+                </div>
+              )}
+
               <Button
                 variant="primary"
-                onClick={handlePublish}
+                type="submit"
                 style={{ justifyContent: 'center' }}
               >
                 <i className="fa-solid fa-paper-plane" />

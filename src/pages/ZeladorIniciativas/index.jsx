@@ -131,12 +131,38 @@ const FormCard = styled(Surface)`
         outline: none;
         border-color: var(--cor-primaria);
       }
+
+      &.input-error {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
     }
 
     textarea {
       min-height: 4.5rem;
       resize: vertical;
     }
+
+    .error-text {
+      color: #d32f2f;
+      font-size: 0.76rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  }
+
+  .success-banner {
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
+    background-color: rgb(from var(--cor-primaria) r g b / 14%);
+    color: var(--cor-primaria);
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 `;
 
@@ -148,6 +174,8 @@ export default function ZeladorIniciativas() {
   const [descricao, setDescricao] = useState('');
   const [tipoRelacao, setTipoRelacao] = useState('DEMANDA');
   const [relacaoId, setRelacaoId] = useState('');
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState('');
   const [version, setVersion] = useState(0);
 
   const iniciativas = iniciativaService.getByBairro(bairroId);
@@ -156,9 +184,29 @@ export default function ZeladorIniciativas() {
   void version;
 
   const handleCreate = (e) => {
-    e.preventDefault();
-    if (!nome.trim() || !descricao.trim()) return;
+    if (e) e.preventDefault();
 
+    const newErrors = {};
+    if (!nome.trim()) {
+      newErrors.nome = 'Informe o título da iniciativa.';
+    }
+    if (tipoRelacao === 'DEMANDA' && !relacaoId) {
+      newErrors.relacaoId = 'Selecione a ocorrência relacionada.';
+    }
+    if (tipoRelacao === 'EVENTO' && !relacaoId) {
+      newErrors.relacaoId = 'Selecione o evento relacionado.';
+    }
+    if (!descricao.trim()) {
+      newErrors.descricao = 'Informe o resumo da entrega ou ação.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setSuccessMsg('');
+      return;
+    }
+
+    setErrors({});
     iniciativaService.create({
       nome: nome.trim(),
       descricao: descricao.trim(),
@@ -173,6 +221,7 @@ export default function ZeladorIniciativas() {
     setNome('');
     setDescricao('');
     setRelacaoId('');
+    setSuccessMsg('Iniciativa divulgada no mural com sucesso!');
     setVersion((v) => v + 1);
   };
 
@@ -212,17 +261,29 @@ export default function ZeladorIniciativas() {
 
           <FormCard>
             <h3>Divulgar nova iniciativa</h3>
-            <form onSubmit={handleCreate}>
+            <form onSubmit={handleCreate} noValidate>
               <div className="field-group">
-                <label htmlFor="ini-nome">Título da iniciativa</label>
+                <label htmlFor="ini-nome">Título da iniciativa *</label>
                 <input
                   id="ini-nome"
                   type="text"
+                  className={errors.nome ? 'input-error' : ''}
                   value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  onChange={(e) => {
+                    setNome(e.target.value);
+                    if (errors.nome) {
+                      setErrors((prev) => ({ ...prev, nome: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Ex: Praça Central revitalizada"
-                  required
                 />
+                {errors.nome && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.nome}
+                  </span>
+                )}
               </div>
 
               <div className="field-group">
@@ -233,6 +294,7 @@ export default function ZeladorIniciativas() {
                   onChange={(e) => {
                     setTipoRelacao(e.target.value);
                     setRelacaoId('');
+                    setErrors((prev) => ({ ...prev, relacaoId: undefined }));
                   }}
                 >
                   <option value="DEMANDA">Vincular a uma Ocorrência</option>
@@ -243,11 +305,20 @@ export default function ZeladorIniciativas() {
 
               {tipoRelacao === 'DEMANDA' && (
                 <div className="field-group">
-                  <label htmlFor="ini-demanda">Ocorrência relacionada</label>
+                  <label htmlFor="ini-demanda">Ocorrência relacionada *</label>
                   <select
                     id="ini-demanda"
+                    className={errors.relacaoId ? 'input-error' : ''}
                     value={relacaoId}
-                    onChange={(e) => setRelacaoId(e.target.value)}
+                    onChange={(e) => {
+                      setRelacaoId(e.target.value);
+                      if (errors.relacaoId) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          relacaoId: undefined,
+                        }));
+                      }
+                    }}
                   >
                     <option value="">Selecione uma ocorrência...</option>
                     {ocorrencias.map((oc) => (
@@ -257,16 +328,31 @@ export default function ZeladorIniciativas() {
                       </option>
                     ))}
                   </select>
+                  {errors.relacaoId && (
+                    <span className="error-text">
+                      <i className="fa-solid fa-circle-exclamation" />
+                      {errors.relacaoId}
+                    </span>
+                  )}
                 </div>
               )}
 
               {tipoRelacao === 'EVENTO' && (
                 <div className="field-group">
-                  <label htmlFor="ini-evento">Evento relacionado</label>
+                  <label htmlFor="ini-evento">Evento relacionado *</label>
                   <select
                     id="ini-evento"
+                    className={errors.relacaoId ? 'input-error' : ''}
                     value={relacaoId}
-                    onChange={(e) => setRelacaoId(e.target.value)}
+                    onChange={(e) => {
+                      setRelacaoId(e.target.value);
+                      if (errors.relacaoId) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          relacaoId: undefined,
+                        }));
+                      }
+                    }}
                   >
                     <option value="">Selecione um evento...</option>
                     {eventos.map((ev) => (
@@ -275,23 +361,48 @@ export default function ZeladorIniciativas() {
                       </option>
                     ))}
                   </select>
+                  {errors.relacaoId && (
+                    <span className="error-text">
+                      <i className="fa-solid fa-circle-exclamation" />
+                      {errors.relacaoId}
+                    </span>
+                  )}
                 </div>
               )}
 
               <div className="field-group">
-                <label htmlFor="ini-desc">Resumo da entrega / ação</label>
+                <label htmlFor="ini-desc">Resumo da entrega / ação *</label>
                 <textarea
                   id="ini-desc"
+                  className={errors.descricao ? 'input-error' : ''}
                   value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
+                  onChange={(e) => {
+                    setDescricao(e.target.value);
+                    if (errors.descricao) {
+                      setErrors((prev) => ({ ...prev, descricao: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Descreva os benefícios entregues para os moradores..."
-                  required
                 />
+                {errors.descricao && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.descricao}
+                  </span>
+                )}
               </div>
+
+              {successMsg && (
+                <div className="success-banner">
+                  <i className="fa-solid fa-circle-check" />
+                  <span>{successMsg}</span>
+                </div>
+              )}
 
               <Button
                 variant="primary"
-                onClick={handleCreate}
+                type="submit"
                 style={{ justifyContent: 'center' }}
               >
                 <i className="fa-solid fa-bullhorn" />

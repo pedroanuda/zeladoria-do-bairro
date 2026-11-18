@@ -315,6 +315,33 @@ const NewPostCard = styled(Surface)`
       outline: none;
       border-color: var(--cor-primaria);
     }
+
+    &.input-error {
+      border-color: #d32f2f;
+      background-color: #fff8f8;
+    }
+  }
+
+  .error-text {
+    color: #d32f2f;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: -0.35rem;
+  }
+
+  .success-banner {
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    background-color: rgb(from var(--cor-primaria) r g b / 14%);
+    color: var(--cor-primaria);
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
   }
 
   textarea {
@@ -486,7 +513,22 @@ const PostCard = styled(Surface)`
         outline: none;
         border-color: var(--cor-primaria);
       }
+
+      &.input-error {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
     }
+  }
+
+  .comment-error-text {
+    color: #d32f2f;
+    font-size: 0.76rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: -0.25rem;
   }
 `;
 
@@ -721,7 +763,10 @@ export default function Mural() {
   const [postsVersion, setPostsVersion] = useState(0);
   const [novoPostTitulo, setNovoPostTitulo] = useState('');
   const [novoPostConteudo, setNovoPostConteudo] = useState('');
+  const [postErrors, setPostErrors] = useState({});
+  const [postSuccess, setPostSuccess] = useState('');
   const [commentInputs, setCommentInputs] = useState({});
+  const [commentErrors, setCommentErrors] = useState({});
 
   const iniciativasBairro = iniciativaService.getByBairro(selectedBairroId);
   const iniciativasFiltradas = iniciativasBairro.filter((ini) => {
@@ -732,7 +777,6 @@ export default function Mural() {
     return true;
   });
 
-  // postsVersion força re-leitura após criar post, apoiar ou comentar
   const postsBairro = postService
     .getByBairro(selectedBairroId)
     .slice()
@@ -745,9 +789,28 @@ export default function Mural() {
     .sort((a, b) => b.dataCriacao - a.dataCriacao);
 
   const handleCreatePost = (e) => {
-    e.preventDefault();
-    if (!novoPostTitulo.trim() || !novoPostConteudo.trim()) return;
+    if (e) e.preventDefault();
 
+    const errors = {};
+    if (!novoPostTitulo.trim()) {
+      errors.titulo = 'Informe o título da sua publicação ou sugestão.';
+    } else if (novoPostTitulo.trim().length < 4) {
+      errors.titulo = 'O título deve ter pelo menos 4 caracteres.';
+    }
+
+    if (!novoPostConteudo.trim()) {
+      errors.conteudo = 'Escreva o conteúdo da sua publicação antes de enviar.';
+    } else if (novoPostConteudo.trim().length < 8) {
+      errors.conteudo = 'O conteúdo deve ter pelo menos 8 caracteres.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setPostErrors(errors);
+      setPostSuccess('');
+      return;
+    }
+
+    setPostErrors({});
     postService.create({
       titulo: novoPostTitulo.trim(),
       conteudo: novoPostConteudo.trim(),
@@ -760,6 +823,7 @@ export default function Mural() {
 
     setNovoPostTitulo('');
     setNovoPostConteudo('');
+    setPostSuccess('Sua publicação foi enviada ao mural com sucesso!');
     setPostsVersion((v) => v + 1);
   };
 
@@ -769,10 +833,17 @@ export default function Mural() {
   };
 
   const handleAddComment = (e, postId) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const texto = commentInputs[postId]?.trim();
-    if (!texto) return;
+    if (!texto) {
+      setCommentErrors((prev) => ({
+        ...prev,
+        [postId]: 'Digite uma mensagem antes de enviar o comentário.',
+      }));
+      return;
+    }
 
+    setCommentErrors((prev) => ({ ...prev, [postId]: undefined }));
     postService.addComentario(postId, {
       conteudo: texto,
       autorId: currentUser?.id ?? 1,
@@ -911,26 +982,59 @@ export default function Mural() {
                 <i className="fa-regular fa-pen-to-square" />
                 <h3>Publicar no blog da comunidade ou sugerir melhoria</h3>
               </div>
-              <form onSubmit={handleCreatePost}>
+              <form onSubmit={handleCreatePost} noValidate>
                 <input
                   type="text"
+                  className={postErrors.titulo ? 'input-error' : ''}
                   value={novoPostTitulo}
-                  onChange={(e) => setNovoPostTitulo(e.target.value)}
+                  onChange={(e) => {
+                    setNovoPostTitulo(e.target.value);
+                    if (postErrors.titulo) {
+                      setPostErrors((prev) => ({ ...prev, titulo: undefined }));
+                    }
+                    if (postSuccess) setPostSuccess('');
+                  }}
                   placeholder="Título da sua publicação ou sugestão de melhoria..."
-                  required
                 />
+                {postErrors.titulo && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {postErrors.titulo}
+                  </span>
+                )}
                 <textarea
+                  className={postErrors.conteudo ? 'input-error' : ''}
                   value={novoPostConteudo}
-                  onChange={(e) => setNovoPostConteudo(e.target.value)}
+                  onChange={(e) => {
+                    setNovoPostConteudo(e.target.value);
+                    if (postErrors.conteudo) {
+                      setPostErrors((prev) => ({
+                        ...prev,
+                        conteudo: undefined,
+                      }));
+                    }
+                    if (postSuccess) setPostSuccess('');
+                  }}
                   placeholder="Compartilhe uma ideia, avise os vizinhos ou proponha uma melhoria para o bairro..."
-                  required
                 />
+                {postErrors.conteudo && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {postErrors.conteudo}
+                  </span>
+                )}
+                {postSuccess && (
+                  <div className="success-banner">
+                    <i className="fa-solid fa-circle-check" />
+                    <span>{postSuccess}</span>
+                  </div>
+                )}
                 <div className="composer-actions">
                   <span className="composer-hint">
                     Publicando como <strong>{currentUser?.nome}</strong> em{' '}
                     {bairros.find((b) => b.id === selectedBairroId)?.nome}
                   </span>
-                  <Button variant="primary" onClick={handleCreatePost}>
+                  <Button variant="primary" type="submit">
                     <i className="fa-solid fa-paper-plane" />
                     Publicar no mural
                   </Button>
@@ -1019,25 +1123,38 @@ export default function Mural() {
                       <form
                         className="comment-form"
                         onSubmit={(e) => handleAddComment(e, post.id)}
+                        noValidate
                       >
                         <input
                           type="text"
+                          className={
+                            commentErrors[post.id] ? 'input-error' : ''
+                          }
                           value={commentInputs[post.id] ?? ''}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setCommentInputs((prev) => ({
                               ...prev,
                               [post.id]: e.target.value,
-                            }))
-                          }
+                            }));
+                            if (commentErrors[post.id]) {
+                              setCommentErrors((prev) => ({
+                                ...prev,
+                                [post.id]: undefined,
+                              }));
+                            }
+                          }}
                           placeholder="Escreva um comentário..."
                         />
-                        <Button
-                          variant="secondary"
-                          onClick={(e) => handleAddComment(e, post.id)}
-                        >
+                        <Button variant="secondary" type="submit">
                           Comentar
                         </Button>
                       </form>
+                      {commentErrors[post.id] && (
+                        <span className="comment-error-text">
+                          <i className="fa-solid fa-circle-exclamation" />
+                          {commentErrors[post.id]}
+                        </span>
+                      )}
                     </div>
                   </PostCard>
                 );

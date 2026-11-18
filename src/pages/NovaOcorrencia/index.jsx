@@ -346,6 +346,11 @@ const FormCard = styled(Surface)`
         outline: none;
         border-color: var(--cor-primaria);
       }
+
+      &.input-error {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
     }
 
     textarea {
@@ -353,6 +358,31 @@ const FormCard = styled(Surface)`
       resize: vertical;
       line-height: 1.45;
     }
+
+    .error-text {
+      color: #d32f2f;
+      font-size: 0.78rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.1rem;
+    }
+  }
+
+  .form-error-banner {
+    margin: 0 1.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background-color: #fdecea;
+    border: 1px solid #f5c2c0;
+    color: #c62828;
+    font-size: 0.825rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .form-footer {
@@ -563,6 +593,7 @@ export default function NovaOcorrencia() {
     'Entulho de obra ocupando toda a calçada. Cadeirantes e carrinhos de bebê precisam ir pela rua.',
   );
   const [receberEmail, setReceberEmail] = useState(true);
+  const [errors, setErrors] = useState({});
 
   const [ocorrenciasBairro, setOcorrenciasBairro] = useState(() =>
     ocorrenciaService
@@ -619,8 +650,30 @@ export default function NovaOcorrencia() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!descricao.trim()) return;
+    if (e) e.preventDefault();
+
+    const newErrors = {};
+    if (selectedLocId === 'custom' && !logradouro.trim()) {
+      newErrors.logradouro = 'Informe o logradouro onde ocorre o problema.';
+      setEditingLocation(true);
+    }
+    if (!titulo.trim()) {
+      newErrors.titulo = 'O título resumido da ocorrência é obrigatório.';
+    } else if (titulo.trim().length < 4) {
+      newErrors.titulo = 'O título deve ter pelo menos 4 caracteres.';
+    }
+    if (!descricao.trim()) {
+      newErrors.descricao = 'A descrição detalhada do problema é obrigatória.';
+    } else if (descricao.trim().length < 10) {
+      newErrors.descricao = 'Descreva o problema com pelo menos 10 caracteres.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
 
     let finalLocalizacaoId =
       selectedLocId !== 'custom' ? Number(selectedLocId) : null;
@@ -635,10 +688,7 @@ export default function NovaOcorrencia() {
       finalLocalizacaoId = novaLoc.id;
     }
 
-    const tituloFinal =
-      titulo.trim() ||
-      descricao.trim().split('.')[0].slice(0, 60) ||
-      'Nova ocorrência registrada';
+    const tituloFinal = titulo.trim();
 
     const criada = ocorrenciaService.create({
       titulo: tituloFinal,
@@ -690,7 +740,7 @@ export default function NovaOcorrencia() {
 
         <div className="content-grid">
           <FormCard>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <div className="form-step">
                 <div className="step-header">
                   <span className="step-number">1</span>
@@ -802,17 +852,30 @@ export default function NovaOcorrencia() {
 
                       <div className="address-grid">
                         <div className="field-group">
-                          <label htmlFor="logradouro-input">Logradouro</label>
+                          <label htmlFor="logradouro-input">Logradouro *</label>
                           <input
                             id="logradouro-input"
                             type="text"
+                            className={errors.logradouro ? 'input-error' : ''}
                             value={logradouro}
                             onChange={(e) => {
                               setSelectedLocId('custom');
                               setLogradouro(e.target.value);
+                              if (errors.logradouro) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  logradouro: undefined,
+                                }));
+                              }
                             }}
                             placeholder="Ex: Rua das Acácias"
                           />
+                          {errors.logradouro && (
+                            <span className="error-text">
+                              <i className="fa-solid fa-circle-exclamation" />
+                              {errors.logradouro}
+                            </span>
+                          )}
                         </div>
                         <div className="field-group">
                           <label htmlFor="numero-input">Número</label>
@@ -854,30 +917,65 @@ export default function NovaOcorrencia() {
                 </div>
                 <div className="location-fields">
                   <div className="field-group">
-                    <label htmlFor="titulo-input">Título resumido</label>
+                    <label htmlFor="titulo-input">Título resumido *</label>
                     <input
                       id="titulo-input"
                       type="text"
+                      className={errors.titulo ? 'input-error' : ''}
                       value={titulo}
-                      onChange={(e) => setTitulo(e.target.value)}
+                      onChange={(e) => {
+                        setTitulo(e.target.value);
+                        if (errors.titulo) {
+                          setErrors((prev) => ({ ...prev, titulo: undefined }));
+                        }
+                      }}
                       placeholder="Ex: Calçada obstruída"
-                      required
                     />
+                    {errors.titulo && (
+                      <span className="error-text">
+                        <i className="fa-solid fa-circle-exclamation" />
+                        {errors.titulo}
+                      </span>
+                    )}
                   </div>
                   <div className="field-group">
                     <label htmlFor="descricao-input">
-                      Detalhes da ocorrência
+                      Detalhes da ocorrência *
                     </label>
                     <textarea
                       id="descricao-input"
+                      className={errors.descricao ? 'input-error' : ''}
                       value={descricao}
-                      onChange={(e) => setDescricao(e.target.value)}
+                      onChange={(e) => {
+                        setDescricao(e.target.value);
+                        if (errors.descricao) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            descricao: undefined,
+                          }));
+                        }
+                      }}
                       placeholder="Conte o que está acontecendo e quem é afetado..."
-                      required
                     />
+                    {errors.descricao && (
+                      <span className="error-text">
+                        <i className="fa-solid fa-circle-exclamation" />
+                        {errors.descricao}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
+
+              {Object.values(errors).some(Boolean) && (
+                <div className="form-error-banner">
+                  <i className="fa-solid fa-triangle-exclamation" />
+                  <span>
+                    Verifique os campos obrigatórios destacados em vermelho
+                    antes de enviar.
+                  </span>
+                </div>
+              )}
 
               <div className="form-footer">
                 <label className="email-checkbox">
@@ -888,7 +986,7 @@ export default function NovaOcorrencia() {
                   />
                   <span>Receber atualizações por e-mail</span>
                 </label>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button variant="primary" type="submit">
                   Enviar ocorrência
                 </Button>
               </div>

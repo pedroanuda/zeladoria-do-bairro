@@ -143,12 +143,38 @@ const FormCard = styled(Surface)`
         outline: none;
         border-color: var(--cor-primaria);
       }
+
+      &.input-error {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
     }
 
     textarea {
       min-height: 4.5rem;
       resize: vertical;
     }
+
+    .error-text {
+      color: #d32f2f;
+      font-size: 0.76rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  }
+
+  .success-banner {
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
+    background-color: rgb(from var(--cor-primaria) r g b / 14%);
+    color: var(--cor-primaria);
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 `;
 
@@ -161,6 +187,8 @@ export default function ZeladorEventos() {
   const [dataHora, setDataHora] = useState('2026-11-30T09:00');
   const [localizacaoId, setLocalizacaoId] = useState(localizacoes[0]?.id ?? '');
   const [descricao, setDescricao] = useState('');
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState('');
   const [version, setVersion] = useState(0);
 
   const eventos = eventoService
@@ -170,9 +198,26 @@ export default function ZeladorEventos() {
   void version;
 
   const handleCreate = (e) => {
-    e.preventDefault();
-    if (!nome.trim() || !descricao.trim()) return;
+    if (e) e.preventDefault();
 
+    const newErrors = {};
+    if (!nome.trim()) {
+      newErrors.nome = 'Informe o nome do evento.';
+    }
+    if (!dataHora) {
+      newErrors.dataHora = 'Informe a data e o horário do evento.';
+    }
+    if (!descricao.trim()) {
+      newErrors.descricao = 'Informe a descrição e orientações do evento.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setSuccessMsg('');
+      return;
+    }
+
+    setErrors({});
     eventoService.create({
       nome: nome.trim(),
       descricao: descricao.trim(),
@@ -185,6 +230,7 @@ export default function ZeladorEventos() {
 
     setNome('');
     setDescricao('');
+    setSuccessMsg('Evento agendado no bairro com sucesso!');
     setVersion((v) => v + 1);
   };
 
@@ -228,28 +274,51 @@ export default function ZeladorEventos() {
 
           <FormCard>
             <h3>Criar novo evento</h3>
-            <form onSubmit={handleCreate}>
+            <form onSubmit={handleCreate} noValidate>
               <div className="field-group">
-                <label htmlFor="ev-nome">Nome do evento</label>
+                <label htmlFor="ev-nome">Nome do evento *</label>
                 <input
                   id="ev-nome"
                   type="text"
+                  className={errors.nome ? 'input-error' : ''}
                   value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  onChange={(e) => {
+                    setNome(e.target.value);
+                    if (errors.nome) {
+                      setErrors((prev) => ({ ...prev, nome: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Ex: Mutirão de limpeza da praça"
-                  required
                 />
+                {errors.nome && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.nome}
+                  </span>
+                )}
               </div>
 
               <div className="field-group">
-                <label htmlFor="ev-data">Data e horário</label>
+                <label htmlFor="ev-data">Data e horário *</label>
                 <input
                   id="ev-data"
                   type="datetime-local"
+                  className={errors.dataHora ? 'input-error' : ''}
                   value={dataHora}
-                  onChange={(e) => setDataHora(e.target.value)}
-                  required
+                  onChange={(e) => {
+                    setDataHora(e.target.value);
+                    if (errors.dataHora) {
+                      setErrors((prev) => ({ ...prev, dataHora: undefined }));
+                    }
+                  }}
                 />
+                {errors.dataHora && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.dataHora}
+                  </span>
+                )}
               </div>
 
               <div className="field-group">
@@ -269,19 +338,38 @@ export default function ZeladorEventos() {
               </div>
 
               <div className="field-group">
-                <label htmlFor="ev-desc">Descrição e orientações</label>
+                <label htmlFor="ev-desc">Descrição e orientações *</label>
                 <textarea
                   id="ev-desc"
+                  className={errors.descricao ? 'input-error' : ''}
                   value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
+                  onChange={(e) => {
+                    setDescricao(e.target.value);
+                    if (errors.descricao) {
+                      setErrors((prev) => ({ ...prev, descricao: undefined }));
+                    }
+                    if (successMsg) setSuccessMsg('');
+                  }}
                   placeholder="Informe o objetivo do encontro e como os moradores podem participar..."
-                  required
                 />
+                {errors.descricao && (
+                  <span className="error-text">
+                    <i className="fa-solid fa-circle-exclamation" />
+                    {errors.descricao}
+                  </span>
+                )}
               </div>
+
+              {successMsg && (
+                <div className="success-banner">
+                  <i className="fa-solid fa-circle-check" />
+                  <span>{successMsg}</span>
+                </div>
+              )}
 
               <Button
                 variant="primary"
-                onClick={handleCreate}
+                type="submit"
                 style={{ justifyContent: 'center' }}
               >
                 <i className="fa-regular fa-calendar-plus" />
