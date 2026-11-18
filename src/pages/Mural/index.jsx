@@ -151,6 +151,26 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1.25rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .iniciativas-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .community-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+
+    .iniciativas-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const IniciativaCard = styled(Surface)`

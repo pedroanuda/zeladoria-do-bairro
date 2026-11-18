@@ -34,6 +34,10 @@ const StyledSection = styled.section`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
   }
 `;
 

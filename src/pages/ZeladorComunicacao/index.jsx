@@ -42,6 +42,12 @@ const PageWrapper = styled.div`
     flex-direction: column;
     gap: 0.9rem;
   }
+
+  @media (max-width: 1024px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const ItemCard = styled(Surface)`

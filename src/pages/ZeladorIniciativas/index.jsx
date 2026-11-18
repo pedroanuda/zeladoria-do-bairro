@@ -42,6 +42,18 @@ const PageWrapper = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
+
+  @media (max-width: 1024px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cards-list {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const IniciativaCard = styled(Surface)`

@@ -93,6 +93,14 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+  }
 `;
 
 const FiltersCard = styled(Surface)`
@@ -137,6 +145,11 @@ const FiltersCard = styled(Surface)`
   .search-box {
     position: relative;
     min-width: 17rem;
+
+    @media (max-width: 640px) {
+      min-width: 0;
+      width: 100%;
+    }
 
     i {
       position: absolute;

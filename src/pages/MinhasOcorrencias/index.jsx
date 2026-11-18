@@ -55,6 +55,27 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 0.85rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .summary-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const SummaryCard = styled(Surface)`
@@ -149,6 +170,11 @@ const FiltersBar = styled(Surface)`
   .search-box {
     position: relative;
     min-width: 17rem;
+
+    @media (max-width: 640px) {
+      min-width: 0;
+      width: 100%;
+    }
 
     i {
       position: absolute;

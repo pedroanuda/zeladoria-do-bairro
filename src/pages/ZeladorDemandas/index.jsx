@@ -105,6 +105,14 @@ const PageWrapper = styled.div`
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     align-items: start;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .kanban-col {

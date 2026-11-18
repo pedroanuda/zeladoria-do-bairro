@@ -42,10 +42,30 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1.25rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+  }
 `;
 
 const ArticleSurface = styled(Surface)`
   padding: 2rem 2.25rem;
+
+  @media (max-width: 640px) {
+    padding: 1.25rem;
+
+    h1 {
+      font-size: 1.4rem;
+    }
+  }
 
   .article-meta-top {
     display: flex;

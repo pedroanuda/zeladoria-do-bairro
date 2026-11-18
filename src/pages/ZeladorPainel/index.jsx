@@ -96,6 +96,32 @@ const PageWrapper = styled.div`
     flex-direction: column;
     gap: 1.25rem;
   }
+
+  @media (max-width: 1120px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .top-actions {
+      width: 100%;
+      flex-wrap: wrap;
+
+      .search-input {
+        min-width: 0;
+        width: 100%;
+      }
+    }
+
+    .kpi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const KpiCard = styled(Surface)`
@@ -167,6 +193,7 @@ const KpiCard = styled(Surface)`
 
 const QueueCard = styled(Surface)`
   padding: 1.35rem;
+  overflow-x: auto;
 
   .queue-header {
     display: flex;

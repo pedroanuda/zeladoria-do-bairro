@@ -1,6 +1,7 @@
 import fullLogoDark from '@/assets/logo-full-dark.png';
 import { StatusOcorrencia } from '@/common/models/index.js';
 import { ocorrenciaService, usuarioService } from '@/services';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import styled from 'styled-components';
 
@@ -9,6 +10,40 @@ const LayoutWrapper = styled.div`
   grid-template-columns: 16rem 1fr;
   min-height: 100vh;
   background-color: var(--cor-fundo);
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const MobileTopBar = styled.div`
+  display: none;
+  background-color: var(--cor-grafite);
+  color: var(--cor-superficie);
+  padding: 0.85rem 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+
+  img {
+    height: 2rem;
+  }
+
+  .menu-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--cor-superficie);
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
+  }
 `;
 
 const StyledSidebar = styled.aside`
@@ -21,6 +56,7 @@ const StyledSidebar = styled.aside`
   position: sticky;
   top: 0;
   height: 100vh;
+  z-index: 55;
 
   .sidebar-top {
     display: flex;
@@ -187,14 +223,39 @@ const StyledSidebar = styled.aside`
       color: var(--cor-superficie);
     }
   }
+
+  @media (max-width: 960px) {
+    display: none;
+    height: auto;
+    position: relative;
+    padding: 1rem 1.25rem 1.5rem;
+    gap: 1.5rem;
+
+    &.mobile-open {
+      display: flex;
+    }
+
+    .logo-link {
+      display: none;
+    }
+  }
 `;
 
 const ContentArea = styled.main`
   padding: 2rem 2.75rem 3rem;
   min-width: 0;
+
+  @media (max-width: 1024px) {
+    padding: 1.5rem 1.5rem 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    padding: 1.25rem 1rem 2rem;
+  }
 `;
 
 export default function ZeladorLayout({ children }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const zelador = usuarioService.getCurrentZelador();
   const bairroId = zelador?.bairroId ?? 1;
 
@@ -212,7 +273,25 @@ export default function ZeladorLayout({ children }) {
 
   return (
     <LayoutWrapper>
-      <StyledSidebar>
+      <MobileTopBar>
+        <Link to="/zelador/painel" style={{ display: 'flex' }}>
+          <img src={fullLogoDark} alt="Zeladoria do Bairro" />
+        </Link>
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label="Alternar menu do zelador"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+        >
+          <i
+            className={
+              mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'
+            }
+          />
+        </button>
+      </MobileTopBar>
+
+      <StyledSidebar className={mobileMenuOpen ? 'mobile-open' : ''}>
         <div className="sidebar-top">
           <Link to="/zelador/painel" className="logo-link">
             <img src={fullLogoDark} alt="Zeladoria do Bairro" />
@@ -223,6 +302,7 @@ export default function ZeladorLayout({ children }) {
               <li>
                 <NavLink
                   to="/zelador/painel"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }
@@ -237,6 +317,7 @@ export default function ZeladorLayout({ children }) {
               <li>
                 <NavLink
                   to="/zelador/demandas"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }
@@ -252,6 +333,7 @@ export default function ZeladorLayout({ children }) {
               <li>
                 <NavLink
                   to="/zelador/iniciativas"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }
@@ -266,6 +348,7 @@ export default function ZeladorLayout({ children }) {
               <li>
                 <NavLink
                   to="/zelador/comunicacao"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }
@@ -280,6 +363,7 @@ export default function ZeladorLayout({ children }) {
               <li>
                 <NavLink
                   to="/zelador/eventos"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }

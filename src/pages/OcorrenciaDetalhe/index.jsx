@@ -127,6 +127,27 @@ const StyledMain = styled.main`
       color: var(--cor-grafite);
     }
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      height: auto;
+
+      .photo-box {
+        height: 13rem;
+      }
+    }
+  }
 `;
 
 const TimelineCard = styled(Surface)`

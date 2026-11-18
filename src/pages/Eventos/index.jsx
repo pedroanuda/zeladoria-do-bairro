@@ -103,6 +103,18 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1.25rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .eventos-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+  }
 `;
 
 const EventoCard = styled(Surface)`
@@ -110,6 +122,12 @@ const EventoCard = styled(Surface)`
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    padding: 1.15rem;
+    gap: 0.9rem;
+  }
 
   .calendar-badge {
     width: 4rem;

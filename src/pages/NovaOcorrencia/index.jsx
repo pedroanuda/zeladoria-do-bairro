@@ -94,6 +94,18 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1.25rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem 2.5rem;
+
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+  }
 `;
 
 const FormCard = styled(Surface)`
@@ -140,6 +152,14 @@ const FormCard = styled(Surface)`
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 0.65rem;
+
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .categoria-btn {
@@ -293,6 +313,10 @@ const FormCard = styled(Surface)`
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 0.75rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .field-group {
@@ -337,6 +361,7 @@ const FormCard = styled(Surface)`
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
 
     .email-checkbox {
       display: inline-flex;

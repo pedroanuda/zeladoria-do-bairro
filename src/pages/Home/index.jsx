@@ -87,6 +87,29 @@ const StyledMain = styled.main`
     flex-direction: column;
     gap: 1.5rem;
   }
+
+  @media (max-width: 1024px) {
+    margin: 1.5rem 2rem;
+
+    .conteudo-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin: 1.25rem 1rem 2rem;
+
+    .greeting-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+
+    .action-buttons {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
 `;
 
 const days = [
