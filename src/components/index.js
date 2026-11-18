@@ -1,5 +1,7 @@
+import Button from './Button';
 import Footer from './Footer';
 import Header from './Header';
-import Button from './Button';
+import Surface from './Surface';
+import ZeladorLayout from './ZeladorLayout';
 
-export { Header, Footer, Button };
+export { Button, Footer, Header, Surface, ZeladorLayout };

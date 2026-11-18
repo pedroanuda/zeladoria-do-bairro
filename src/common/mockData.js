@@ -447,6 +447,160 @@ const ocorrencias = [
       }),
     ],
   }),
+
+  // Cenários adicionais na Vila Mariana para enriquecer o Painel e Kanban do Zelador
+  new Ocorrencia({
+    id: 8,
+    titulo: 'Fiação exposta em poste próximo à esquina',
+    descricao:
+      'Cabos soltos na altura de pedestres oferecendo risco na calçada.',
+    localizacaoId: 2,
+    anexos: [],
+    categoria: CategoriaOcorrencia.SEGURANCA,
+    status: StatusOcorrencia.EM_ANALISE,
+    solicitanteId: 2,
+    apoios: 18,
+    prioridade: PrioridadeOcorrencia.ALTA,
+    dataCriacao: new Date('2026-11-14T11:20:00-03:00'),
+    atribuidoParaId: 3,
+    atualizacoes: [
+      new OcorrenciaAtualizacao({
+        id: 15,
+        status: StatusOcorrencia.ABERTA,
+        observacao: 'Solicitação registrada.',
+        autorId: 2,
+        data: new Date('2026-11-14T11:20:00-03:00'),
+      }),
+      new OcorrenciaAtualizacao({
+        id: 16,
+        status: StatusOcorrencia.EM_ANALISE,
+        observacao: 'Notificação técnica enviada à concessionária.',
+        autorId: 3,
+        data: new Date('2026-11-15T09:10:00-03:00'),
+      }),
+    ],
+  }),
+
+  new Ocorrencia({
+    id: 9,
+    titulo: 'Rampa de acessibilidade sem piso tátil',
+    descricao:
+      'Travessia de pedestres na praça está com o piso tátil de alerta desgastado.',
+    localizacaoId: 3,
+    anexos: [],
+    categoria: CategoriaOcorrencia.AREAS_VERDES,
+    status: StatusOcorrencia.EM_ANALISE,
+    solicitanteId: 4,
+    apoios: 4,
+    prioridade: PrioridadeOcorrencia.BAIXA,
+    dataCriacao: new Date('2026-11-10T13:00:00-03:00'),
+    atribuidoParaId: 3,
+    atualizacoes: [
+      new OcorrenciaAtualizacao({
+        id: 17,
+        status: StatusOcorrencia.ABERTA,
+        observacao: 'Abertura realizada pela moradora.',
+        autorId: 4,
+        data: new Date('2026-11-10T13:00:00-03:00'),
+      }),
+      new OcorrenciaAtualizacao({
+        id: 18,
+        status: StatusOcorrencia.EM_ANALISE,
+        observacao: 'Em levantamento de material para reposição.',
+        autorId: 3,
+        data: new Date('2026-11-12T16:00:00-03:00'),
+      }),
+    ],
+  }),
+
+  new Ocorrencia({
+    id: 10,
+    titulo: 'Faixa de pedestre apagada em frente à estação',
+    descricao:
+      'Pintura de sinalização horizontal desgastada em travessia de grande fluxo.',
+    localizacaoId: 1,
+    anexos: [],
+    categoria: CategoriaOcorrencia.SEGURANCA,
+    status: StatusOcorrencia.ABERTA,
+    solicitanteId: 2,
+    apoios: 15,
+    prioridade: PrioridadeOcorrencia.ALTA,
+    dataCriacao: new Date('2026-11-15T08:30:00-03:00'),
+    atribuidoParaId: null,
+    atualizacoes: [
+      new OcorrenciaAtualizacao({
+        id: 19,
+        status: StatusOcorrencia.ABERTA,
+        observacao: 'Aguardando avaliação técnica.',
+        autorId: 2,
+        data: new Date('2026-11-15T08:30:00-03:00'),
+      }),
+    ],
+  }),
+
+  new Ocorrencia({
+    id: 11,
+    titulo: 'Grelha de drenagem quebrada na Rua Joaquim Távora',
+    descricao:
+      'Grade metálica da boca de lobo cedeu na sarjeta, gerando risco para ciclistas e pedestres.',
+    localizacaoId: 4,
+    anexos: [],
+    categoria: CategoriaOcorrencia.DRENAGEM,
+    status: StatusOcorrencia.EM_ANDAMENTO,
+    solicitanteId: 4,
+    apoios: 14,
+    prioridade: PrioridadeOcorrencia.MEDIA,
+    dataCriacao: new Date('2026-11-09T14:20:00-03:00'),
+    atribuidoParaId: 3,
+    atualizacoes: [
+      new OcorrenciaAtualizacao({
+        id: 20,
+        status: StatusOcorrencia.ABERTA,
+        observacao: 'Solicitação aberta.',
+        autorId: 4,
+        data: new Date('2026-11-09T14:20:00-03:00'),
+      }),
+      new OcorrenciaAtualizacao({
+        id: 21,
+        status: StatusOcorrencia.EM_ANDAMENTO,
+        observacao: 'Nova grelha requisitada ao almoxarifado da Subprefeitura.',
+        autorId: 3,
+        data: new Date('2026-11-13T11:45:00-03:00'),
+      }),
+    ],
+  }),
+
+  new Ocorrencia({
+    id: 12,
+    titulo: 'Vazamento na calçada próximo ao hidrante',
+    descricao:
+      'Água limpa escorrendo continuamente na calçada e acumulando no meio-fio.',
+    localizacaoId: 2,
+    anexos: [],
+    categoria: CategoriaOcorrencia.DRENAGEM,
+    status: StatusOcorrencia.CONCLUIDA,
+    solicitanteId: 1,
+    apoios: 21,
+    prioridade: PrioridadeOcorrencia.ALTA,
+    dataCriacao: new Date('2026-11-06T09:00:00-03:00'),
+    atribuidoParaId: 3,
+    atualizacoes: [
+      new OcorrenciaAtualizacao({
+        id: 22,
+        status: StatusOcorrencia.ABERTA,
+        observacao: 'Ocorrência registrada.',
+        autorId: 1,
+        data: new Date('2026-11-06T09:00:00-03:00'),
+      }),
+      new OcorrenciaAtualizacao({
+        id: 23,
+        status: StatusOcorrencia.CONCLUIDA,
+        observacao: 'Reparo da tubulação concluído e calçada recomposta.',
+        autorId: 3,
+        data: new Date('2026-11-09T17:30:00-03:00'),
+      }),
+    ],
+  }),
 ];
 
 const eventos = [

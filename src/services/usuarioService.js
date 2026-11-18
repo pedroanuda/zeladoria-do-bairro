@@ -32,6 +32,11 @@ export const usuarioService = {
     return this.getById(1);
   },
 
+  getCurrentZelador() {
+    // Retorna o zelador padrão logado na visão de Zeladoria (Roberto Alves - ID 3)
+    return this.getById(3);
+  },
+
   create(data) {
     const novoUsuario = data instanceof Usuario ? data : new Usuario(data);
     const saved = db.writeEntity('usuarios', novoUsuario);

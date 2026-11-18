@@ -101,6 +101,14 @@ export default function Header() {
         </nav>
       </div>
       <div className="user-actions-div">
+        <Button
+          variant="secondary"
+          onClick={() => navigate('/zelador/painel')}
+          style={{ fontSize: '0.825rem', padding: '0.5rem 0.85rem' }}
+        >
+          <i className="fa-solid fa-user-shield" />
+          Visão Zelador
+        </Button>
         <Button variant="primary" onClick={() => navigate('/ocorrencias/nova')}>
           <i className="fa-solid fa-plus" />
           Registrar ocorrência
